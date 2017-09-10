@@ -4,24 +4,17 @@
 from settings import *
 
 
-"""
-QUERY_SELECT_IN = 'SELECT key, value FROM %s ' % TABLE_NAME + \
-               'WHERE key in (%s)'
-QUERY_SELECT_LIKE = 'SELECT key, value FROM %s ' % TABLE_NAME + \
-                    'WHERE key LIKE %s'
-QUERY_REPLACE = 'INSERT OR REPLACE INTO %s ' % TABLE_NAME + \
-                '(key, value) VALUES %s'
-"""
-
 QUERY_UPDATE = 'UPDATE %s ' % TABLE_NAME + \
                'SET updated_at = datetime("now"), summary = "%s" WHERE id = %s;'
 QUERY_UPDATE_N_IMAGES = 'UPDATE %s ' % TABLE_NAME + \
                         'SET updated_at = datetime("now"), n_images = %s WHERE id = %s;'
+QUERY_UPDATE_DISPLAY = 'UPDATE %s ' % TABLE_NAME + \
+                       'SET updated_at = datetime("now"), display = 0 WHERE id = %s;'
 
 QUERY_SELECT = 'SELECT %s' + ' FROM %s ' % TABLE_NAME + \
                'WHERE id = %s'
 QUERY_SELECT_ALL = 'SELECT id, title FROM %s ' % TABLE_NAME + \
-                   'ORDER BY updated_at DESC' #  LIMIT 30
+                   'WHERE display = 1 ORDER BY updated_at DESC' #  LIMIT 30
 QUERY_LAST = 'SELECT LAST_INSERT_ROWID() FROM %s' % TABLE_NAME
 # QUERY_REPLACE % ', '.join(['(%s,%s)' % (key, value) for key, value in data_dict])
 QUERY_INSERT = 'INSERT INTO %s (url, title)' % TABLE_NAME + \
@@ -83,6 +76,11 @@ def update_papers_db(paper_id, summary):
 
 def update_n_images_db(paper_id, n_images):
     query = QUERY_UPDATE_N_IMAGES % (n_images, paper_id)
+    CURSOR.execute(query)
+    CONNECTOR.commit()
+
+def update_display_db(paper_id):
+    query = QUERY_UPDATE_DISPLAY % (paper_id)
     CURSOR.execute(query)
     CONNECTOR.commit()
 

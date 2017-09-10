@@ -40,6 +40,7 @@ PAPERS_VARS = [
     'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
     'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
     'n_images INTEGER DEFAULT -1',
+    'display INTEGER DEFAULT 1',
 ]
 
 PAPER_INFO = ['id', 'title', 'summary', 'url', 'n_images', 'updated_at', 'created_at']
