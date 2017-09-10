@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <title>QuillNote</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//{{server}}:{{port}}/assets/index.css" rel="stylesheet">
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://{{server}}:{{port}}/assets/index.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div>
+        <div>Notes:</div>
+        <ul>
+          % for paper_id, title in papers:
+          <li>
+            <a href="http://{{server}}:{{port}}/memo/{{str(paper_id)}}">{{title}}</a>
+          </li>
+          % end
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
