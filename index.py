@@ -99,9 +99,10 @@ def get_n_images(paper_id):
         update_n_images_db(paper_id, str(n_images))
     return str(n_images)
 
-@post('/delete/<paper_id>')
-def delete():
+@route('/delete/<paper_id>')
+def delete(paper_id):
     update_display_db(paper_id)
+    redirect('/')
 
 def clean_up_images():
     im_files = sorted(full_listdir(IMCACHE_DIR), key=os.path.getmtime)
