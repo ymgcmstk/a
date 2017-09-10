@@ -20,7 +20,7 @@ def get_asset_file(filename):
 @route('/')
 def index():
     papers = get_papers_db()
-    return template('viewer.html',
+    return template('view/viewer.html',
                     server=HOST_NAME,
                     port=PORT_VIEWER,
                     papers=papers)
@@ -30,7 +30,7 @@ def memo(paper_id):
     paper_info = get_paper_info_db(paper_id, PAPER_INFO)
     if paper_info['summary'] is None:
         paper_info['summary'] = ""
-    return template('memo_viewer.html',
+    return template('view/memo_viewer.html',
                     server=HOST_NAME,
                     port=PORT_VIEWER,
                     paper_info=paper_info)

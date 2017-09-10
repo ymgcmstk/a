@@ -25,6 +25,7 @@ h3 {
   margin-top: 1rem;
   margin-bottom: 0;
 }
+
 [class*="col-"] {
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -39,7 +40,7 @@ hr {
 
 #quill-container {
   height: auto;
-  padding: 50px;
+  min-height: 100%;
 }
 
 #quill-container .ql-editor {
