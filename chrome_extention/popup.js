@@ -1,6 +1,4 @@
 $(function(){
-    console.log(chrome.storage);
-
     var port = localStorage['port'];
     var server = localStorage['server'];
     if (typeof port === "undefined") port = "8080";
