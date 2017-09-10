@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+    body {
+      overflow: hidden;
+      background: white;
+      width: 200px;
+    }
+    </style>
+    <link href="bootstrap.min.css" rel="stylesheet">
+    <script src="jquery.min.js"></script>
+    <script src="jquery.validate.min.js"></script>
+    <script src="popup.js"></script>
+  </head>
+  <body>
+    <form id="formpdf" method="post" action="/">
+      <label>PDF URL: </label>
+      <input id="pdfurl" type="text" name="pdfurl" id="pdfurl" class="form-control">
+      <label>Paper Title: </label>
+      <input id="pdftitle" type="text" name="pdftitle" id="pdftitle" class="form-control">
+      <label>Server: </label>
+      <input id="server" type="text" name="server" id="server" class="form-control">
+      <label>Port: </label>
+      <input id="port" type="text" name="port" id="port" class="form-control">
+      <button id="submit" class="btn btn-primary center-block">submit</button>
+    </form>
+  </body>
+</html>
