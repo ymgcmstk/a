@@ -27,14 +27,18 @@ def index():
 
 @post('/')
 def index_post():
-    arXiv_id = request.forms.get('arxivid')
-    pdf_url = ARXIV_PDF_URL % str(arXiv_id)
-    abs_url = ARXIV_ABS_URL % str(arXiv_id)
-    cur_html = get_html(abs_url) #, cache=True)
-    cur_html = cur_html[:cur_html.find('</title>')]
-    cur_html = cur_html[cur_html.find('<title>') + len('<title>'):]
-    cur_html = cur_html[cur_html.find(']') + len(']'):]
-    title = cur_html
+    if 'arxivid' in request.forms.keys():
+        arXiv_id = request.forms.get('arxivid')
+        pdf_url = ARXIV_PDF_URL % str(arXiv_id)
+        abs_url = ARXIV_ABS_URL % str(arXiv_id)
+        cur_html = get_html(abs_url) #, cache=True)
+        cur_html = cur_html[:cur_html.find('</title>')]
+        cur_html = cur_html[cur_html.find('<title>') + len('<title>'):]
+        cur_html = cur_html[cur_html.find(']') + len(']'):]
+        title = cur_html
+    else:
+        pdf_url = request.forms.get('pdfurl')
+        title = request.forms.get('pdftitle')
     paper_id = insert_empty_paper(title, pdf_url)
 
     # update n_images
