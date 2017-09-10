@@ -17,10 +17,6 @@ def get_static_file(filename1, filename2):
 def get_asset_file(filename):
     return static_file(filename, root=FILE_DIR)
 
-@route('/assets/fonts/<filename>')
-def get_asset_file2(filename):
-    return static_file(filename, root=os.path.join(FILE_DIR, 'fonts'))
-
 @route('/')
 def index():
     papers = get_papers_db()

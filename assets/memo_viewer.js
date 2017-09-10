@@ -28,11 +28,7 @@ $(function(){
     var quill = new Quill('#quill-container', {
         modules: {
             toolbar: false,
-            imageDrop: true, // https://github.com/kensnyder/quill-image-drop-module
-            keyboard: true,
-            imageResize: {
-                displaySize: true
-            }
+            keyboard: true
         },
         scrollingContainer: '#quill-container',
         placeholder: 'Take a note...',
@@ -48,5 +44,3 @@ $(function(){
     quill.enable(false)
 
 });
-
-// quill.insertEmbed(10, 'image', 'https://pbs.twimg.com/profile_images/378800000220029324/fe66faeca20115da8566e51d83447ead_400x400.jpeg');

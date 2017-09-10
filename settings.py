@@ -6,7 +6,8 @@ import sqlite3
 from mytoolbox import makedirs_if_missing, makebsdirs_if_missing
 
 HOST_NAME = '0.0.0.0'
-PORT = 10000
+PORT = 10002
+PORT_VIEWER = PORT + 1016
 ROOT_DIR = os.path.dirname(os.path.abspath(os.path.join(os.getcwd(), __file__)))
 DATA_DIR = os.path.join(ROOT_DIR, 'data')
 FILE_DIR = os.path.join(ROOT_DIR, 'assets')
