@@ -31,7 +31,7 @@ $(function(){
             keyboard: true
         },
         scrollingContainer: '#quill-container',
-        placeholder: 'Take a note...',
+        placeholder: 'Empty...',
         theme: 'bubble'
     });
 
