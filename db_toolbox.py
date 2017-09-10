@@ -9,12 +9,14 @@ QUERY_UPDATE = 'UPDATE %s ' % TABLE_NAME + \
 QUERY_UPDATE_N_IMAGES = 'UPDATE %s ' % TABLE_NAME + \
                         'SET updated_at = datetime("now"), n_images = %s WHERE id = %s;'
 QUERY_UPDATE_DISPLAY = 'UPDATE %s ' % TABLE_NAME + \
-                       'SET updated_at = datetime("now"), display = 0 WHERE id = %s;'
+                       'SET updated_at = datetime("now"), display = 1 - display WHERE id = %s;'
 
 QUERY_SELECT = 'SELECT %s' + ' FROM %s ' % TABLE_NAME + \
                'WHERE id = %s'
 QUERY_SELECT_ALL = 'SELECT id, title FROM %s ' % TABLE_NAME + \
                    'WHERE display = 1 ORDER BY updated_at DESC' #  LIMIT 30
+QUERY_SELECT_ALL_FULL = 'SELECT id, title, display FROM %s ' % TABLE_NAME + \
+                   'ORDER BY updated_at DESC' #  LIMIT 30
 QUERY_LAST = 'SELECT LAST_INSERT_ROWID() FROM %s' % TABLE_NAME
 # QUERY_REPLACE % ', '.join(['(%s,%s)' % (key, value) for key, value in data_dict])
 QUERY_INSERT = 'INSERT INTO %s (url, title)' % TABLE_NAME + \
@@ -53,6 +55,12 @@ def update_db(data_dict):
 
 def get_papers_db():
     query = QUERY_SELECT_ALL
+    CURSOR.execute(query)
+    results = CURSOR.fetchall()
+    return results
+
+def get_papers_full_db():
+    query = QUERY_SELECT_ALL_FULL
     CURSOR.execute(query)
     results = CURSOR.fetchall()
     return results

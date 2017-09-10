@@ -33,9 +33,13 @@
       <div>
         <div>Notes:</div>
         <ul>
-          % for paper_id, title in papers:
+          % for paper_id, title, display in papers:
           <li>
+            % if display == 1:
             <a href="http://{{server}}:{{port}}/memo/{{str(paper_id)}}">{{title}}</a>
+            % else:
+            <a href="http://{{server}}:{{port}}/memo/{{str(paper_id)}}"><del>{{title}}</del></a>
+            % end
           </li>
           % end
         </ul>

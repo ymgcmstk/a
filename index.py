@@ -19,7 +19,7 @@ def get_asset_file(filename):
 
 @route('/')
 def index():
-    papers = get_papers_db()
+    papers = get_papers_full_db()
     return template('index.html',
                     server=HOST_NAME,
                     port=PORT,
@@ -99,8 +99,8 @@ def get_n_images(paper_id):
         update_n_images_db(paper_id, str(n_images))
     return str(n_images)
 
-@route('/delete/<paper_id>')
-def delete(paper_id):
+@route('/display/<paper_id>')
+def display(paper_id):
     update_display_db(paper_id)
     redirect('/')
 
