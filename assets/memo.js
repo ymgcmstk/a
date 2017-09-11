@@ -51,6 +51,9 @@ $(function(){
     }
     function list_up_images(n_im) {
         $("#comment").remove();
+        if (n_im == 0) {
+            $("#images").remove();
+        }
         for (var i = 0; i < n_im; i++) {
             var cur_url = 'http://' + server + ':' + port + '/static/data_' + paper_id + '/out-' + i.toString() + '.jpg'
             var cur_id = 'image' + i.toString();

@@ -27,7 +27,10 @@ def index():
 
 @post('/')
 def index_post():
-    if 'arxivid' in request.forms.keys():
+    if 'pagetitle' in request.forms.keys():
+        pdf_url = ''
+        title = request.forms.get('pagetitle')
+    elif 'arxivid' in request.forms.keys():
         arXiv_id = request.forms.get('arxivid')
         pdf_url = ARXIV_PDF_URL % str(arXiv_id)
         abs_url = ARXIV_ABS_URL % str(arXiv_id)
@@ -41,15 +44,18 @@ def index_post():
         title = request.forms.get('pdftitle')
     paper_id = insert_empty_paper(title, pdf_url)
 
-    # update n_images
-    print './pdf2jpg.sh "%s" "%s" & ' % (
-        pdf_url,
-        str(paper_id)
-    )
-    os.system('./pdf2jpg.sh "%s" "%s" & ' % (
-        pdf_url,
-        str(paper_id)
-    ))
+    if len(pdf_url) > 0:
+        print './pdf2jpg.sh "%s" "%s" & ' % (
+            pdf_url,
+            str(paper_id)
+        )
+        os.system('./pdf2jpg.sh "%s" "%s" & ' % (
+            pdf_url,
+            str(paper_id)
+        ))
+    else:
+        # update n_images
+        update_n_images_db(paper_id, '0')
     redirect('/memo/%s' % str(paper_id))
 
 @route('/memo/<paper_id>')
