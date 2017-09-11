@@ -36,19 +36,34 @@
         </form>
       </div>
 
-      <div>
-        <div>Notes:</div>
-        <ul>
-          % for paper_id, title, display in papers:
-          <li>
-            % if display == 1:
-            <a href="http://{{server}}:{{port}}/memo/{{str(paper_id)}}">{{title}}</a>
-            % else:
-            <a href="http://{{server}}:{{port}}/memo/{{str(paper_id)}}"><del>{{title}}</del></a>
+      <div id="notes">
+        <table class="table">
+          <thead>
+            <tr><th>Note Title</th><th>Status</th><tr>
+          </thead>
+          <tbody>
+            % for paper_id, title, display in papers:
+            <tr>
+              <td><a href="http://{{server}}:{{port}}/memo/{{str(paper_id)}}">
+                  % if display == 1:
+                  {{title}}
+                  % else:
+                  <S>{{title}}</S>
+                  % end
+              </a></td>
+              <td>
+                <a href="http://{{server}}:{{port}}/display/{{str(paper_id)}}">
+                  % if display == 1:
+                  Shown
+                  % else:
+                  Hidden
+                  % end
+                </a>
+              </td>
+            </tr>
             % end
-          </li>
-          % end
-        </ul>
+          </tbody>
+        </table>
       </div>
     </div>
   </body>
