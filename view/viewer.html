@@ -9,7 +9,6 @@
     <link href="//{{server}}:{{port}}/assets/index.css" rel="stylesheet">
 
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script type="text/javascript" src="http://{{server}}:{{port}}/assets/index.js"></script>
   </head>
 
   <body>
@@ -17,7 +16,7 @@
       <div>
         <table class="table">
           <thead>
-            <tr><th>Note Title</th><th>Last Updated (GMT)</th><tr>
+            <tr><th>Note Title</th><th>Last Updated (GMT)</th></tr>
           </thead>
           <tbody>
             % for paper_id, title, updated_at in papers:
