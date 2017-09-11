@@ -65,7 +65,8 @@ def memo(paper_id):
 @post('/memo/save/<paper_id>')
 def save(paper_id):
     summary = request.forms.get('summary')
-    update_papers_db(paper_id, summary)
+    title = request.forms.get('title')
+    update_papers_db(paper_id, summary, title)
 
 @route('/memo/crop/<paper_id>/<x>/<y>/<w>/<h>/<im_i>')
 def crop(paper_id, x, y, w, h, im_i):

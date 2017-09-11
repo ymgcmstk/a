@@ -85,3 +85,7 @@ ul .slick-prev {
     left: 15px;
     z-index: 100;
 }
+
+[contenteditable="true"]:focus{
+    outline: 0;
+}

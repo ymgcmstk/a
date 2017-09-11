@@ -30,10 +30,10 @@
 
   <body>
     <div class="container">
-      <div id="data" style="display: none;" data-nimages="{{paper_info['n_images']}}" data-server="{{server}}" data-port="{{port}}" data-paperid="{{paper_info['id']}}">{{paper_info['summary']}}</div>
+      <div id="data" style="display: none;" data-nimages="{{paper_info['n_images']}}" data-server="{{server}}" data-port="{{port}}" data-paperid="{{paper_info['id']}}" data-summary="{{paper_info['summary']}}"></div>
 
       <div>
-        <h1 id="title"><a href="{{paper_info['url']}}">{{paper_info['title']}}</a></h1>
+        <h1 id="title" contenteditable="true">{{paper_info['title']}}</h1>
       </div>
       <div id="editor-container">
         <div id="quill-container">
@@ -54,6 +54,7 @@
           Next
         </button>
       </div>
+      <a href="..">back</a>
     </div>
   </body>
 </html>

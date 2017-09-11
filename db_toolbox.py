@@ -5,7 +5,7 @@ from settings import *
 
 
 QUERY_UPDATE = 'UPDATE %s ' % TABLE_NAME + \
-               'SET updated_at = datetime("now"), summary = "%s" WHERE id = %s;'
+               'SET updated_at = datetime("now"), summary = "%s", title="%s" WHERE id = %s;'
 QUERY_UPDATE_N_IMAGES = 'UPDATE %s ' % TABLE_NAME + \
                         'SET updated_at = datetime("now"), n_images = %s WHERE id = %s;'
 QUERY_UPDATE_DISPLAY = 'UPDATE %s ' % TABLE_NAME + \
@@ -76,8 +76,8 @@ def get_n_images_db(paper_id):
     CURSOR.execute(query)
     return CURSOR.fetchall()[0][0]
 
-def update_papers_db(paper_id, summary):
-    query = QUERY_UPDATE % (summary.replace('"', "'"), paper_id)
+def update_papers_db(paper_id, summary, title):
+    query = QUERY_UPDATE % (summary.replace('"', "'"), title.replace('"', "'"), paper_id)
     print query
     CURSOR.execute(query)
     CONNECTOR.commit()

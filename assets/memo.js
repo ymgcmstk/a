@@ -5,8 +5,10 @@ $(function(){
     var last_range = 0;
     var server = $("#data").data("server");
     var port = $("#data").data("port");
-    var paperid = $("#data").data("paperid");
-
+    var paper_id = $("#data").data("paperid");
+    var title = $("#title").text();
+    var title_changed = false;
+    var change, quill;
     // --------- basic functions ---------
     function promote(cur_state, state_list) {
         var i = state_list.indexOf(cur_state);
@@ -50,7 +52,7 @@ $(function(){
     function list_up_images(n_im) {
         $("#comment").remove();
         for (var i = 0; i < n_im; i++) {
-            var cur_url = 'http://' + server + ':' + port + '/static/data_' + paperid + '/out-' + i.toString() + '.jpg'
+            var cur_url = 'http://' + server + ':' + port + '/static/data_' + paper_id + '/out-' + i.toString() + '.jpg'
             var cur_id = 'image' + i.toString();
             if (i == 0) $('#slider').append('<div id="' + cur_id + '"><img id="img' + cur_id + '" src="' + cur_url + '"></div>');
             else $('#slider').append('<div id="' + cur_id + '" style="display:none;"><img id="img' + cur_id + '" src="' + cur_url + '"></div>');
@@ -79,14 +81,22 @@ $(function(){
            set_cropper(i);
         }
     }
+    function save() {
+        if (change.length() > 0 || title_changed) {
+            console.log('start saving...');
+            $.post('./save/' + paper_id, {
+                summary: encodeURI(JSON.stringify(quill.getContents())),
+                title: title
+            });
+            change = new Delta();
+            title_changed = false;
+            console.log('Finish saving.');
+        }
+    }
     // --------- basic functions ---------
 
-    var paper_id = location.href.split('/');
-    var paper_id = paper_id[paper_id.length-1];
-    console.log('Paper ID: ' + paper_id.toString());
-
     var Delta = Quill.import('delta');
-    var quill = new Quill('#quill-container', {
+    quill = new Quill('#quill-container', {
         modules: {
             toolbar: false,
             imageDrop: true, // https://github.com/kensnyder/quill-image-drop-module
@@ -102,28 +112,20 @@ $(function(){
 
     // get data
     var n_images = $("#data").data("nimages");
-    var org_sum = decodeURI($('#data').text());
-    if (org_sum.length > 16) {
+    var org_sum = decodeURI($('#data').data("summary"));
+    if (org_sum.length > 0) {
         quill.setContents(JSON.parse(org_sum));
     }
 
     // Store accumulated changes
-    var change = new Delta();
+    change = new Delta();
     quill.on('text-change', function(delta) {
         change = change.compose(delta);
     });
 
     // Save periodically
-    setInterval(function() {
-        if (change.length() > 0) {
-            $.post('./save/' + paper_id, {
-                summary: encodeURI(JSON.stringify(quill.getContents()))
-            });
-            change = new Delta();
-        }
-    }, 5*1000);
+    setInterval(save, 5*1000);
 
-    // Save periodically
     if (n_images < 0) {
         $("#comment").text('Processing PDF...');
         var get_n_images = setInterval(function() {
@@ -148,7 +150,8 @@ $(function(){
 
     // Check for unsaved data
     window.onbeforeunload = function() {
-        if (change.length() > 0) {
+        if (change.length() > 0 || title_changed) {
+            save();
             return 'There are unsaved changes. Are you sure you want to leave?';
         }
     }
@@ -186,6 +189,17 @@ $(function(){
             cur_size = cur_format['size'];
         }
         this.quill.formatText(range, 'size', demote(cur_size, SIZES));
+    });
+    quill.keyboard.addBinding({
+        key: 'S',
+        shortKey: true
+    }, function(range, context) {
+        save();
+    });
+
+    $('#title').blur(function(e){
+        title = $('#title').text();
+        title_changed = true;
     });
 });
 
