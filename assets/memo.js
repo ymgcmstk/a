@@ -132,7 +132,7 @@ $(function(){
     if (n_images < 0) {
         $("#comment").text('Processing PDF...');
         var get_n_images = setInterval(function() {
-            var cur_data = $.get('./n_images/' + paper_id, {
+            $.get('./n_images/' + paper_id, {
             }).done(function(data) {
                 n_images = data;
                 if (n_images >= 0) {

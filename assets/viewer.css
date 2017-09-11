@@ -1,0 +1,41 @@
+body {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    font-family: PT Sans,Helvetica Neue,Arial,Hiragino Kaku Gothic Pro,Meiryo,MS PGothic,sans-serif;
+    font-size: 18px;
+}
+
+h1 {
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-bottom: 15px;
+}
+
+a#title {
+    color: black;
+}
+
+#toplist {
+    height: 20vh;
+    overflow: auto;
+}
+
+#titlediv {
+    height: 10vh;
+    min-height: 20px;
+}
+
+#note {
+    height: 60vh;
+    overflow: auto;
+}
+
+#quill-container {
+    height: auto;
+    /* min-height: 70%; */
+}
+
+#quill-container .ql-editor {
+    height: auto;
+    font-size: 18px;
+}

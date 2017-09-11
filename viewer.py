@@ -7,6 +7,7 @@ from settings import *
 from mytoolbox import get_html, full_listdir
 import commands
 import cv2
+import json
 import hashlib
 
 @route('/static/<filename1>/<filename2>')
@@ -20,7 +21,8 @@ def get_asset_file(filename):
 @route('/')
 def index():
     papers = get_papers_db()
-    return template('view/viewer.html',
+    # return template('view/viewer.html',
+    return template('view/viewer_exp.html',
                     server=HOST_NAME,
                     port=PORT_VIEWER,
                     papers=papers)
@@ -36,6 +38,16 @@ def memo(paper_id):
                     server=HOST_NAME,
                     port=PORT_VIEWER,
                     paper_info=paper_info)
+
+@post('/load/<paper_id>')
+def load(paper_id):
+    paper_info = get_paper_info_db(paper_id, PAPER_INFO)
+    if paper_info['summary'] is None:
+        paper_info['summary'] = ""
+    if paper_info['display'] == 0:
+        for pkey in paper_info.keys():
+            paper_info[pkey] = ""
+    return json.dumps(paper_info)
 
 @route('/memo/crop/<paper_id>/<x>/<y>/<w>/<h>/<im_i>')
 def crop(paper_id, x, y, w, h, im_i):
