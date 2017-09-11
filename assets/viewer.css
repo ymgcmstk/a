@@ -21,13 +21,12 @@ a#title {
 }
 
 #titlediv {
-    padding-top: 30px;
+    padding-top: 10px;
     height: 10vh;
-    min-height: 20px;
+    min-height: 30px;
 }
 
 #note {
-    padding-top: 30px;
     height: 60vh;
     overflow: auto;
 }
