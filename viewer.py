@@ -18,7 +18,11 @@ def get_asset_file(filename):
 
 @route('/')
 def index():
-    papers = get_papers_db()
+    if 'q' in request.query:
+        query = request.query['q']
+        papers = search_papers_db(query)
+    else:
+        papers = get_papers_db()
     return template('view/viewer.html',
                     server=HOST_NAME,
                     port=PORT_VIEWER,

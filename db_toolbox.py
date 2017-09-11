@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 from settings import *
-
+import urllib
 
 QUERY_UPDATE = 'UPDATE %s ' % TABLE_NAME + \
                'SET updated_at = datetime("now"), summary = "%s", title="%s" WHERE id = %s;'
@@ -17,10 +17,18 @@ QUERY_SELECT_ALL = 'SELECT id, title, updated_at FROM %s ' % TABLE_NAME + \
                    'WHERE display = 1 ORDER BY updated_at DESC' #  LIMIT 30
 QUERY_SELECT_ALL_FULL = 'SELECT id, title, display, updated_at FROM %s ' % TABLE_NAME + \
                    'ORDER BY updated_at DESC' #  LIMIT 30
+
+QUERY_SELECT_WITH_QUERY = 'SELECT id, title, updated_at FROM %s ' % TABLE_NAME + \
+                          'WHERE display = 1 AND %s ORDER BY updated_at DESC' #  LIMIT 30
+
 QUERY_LAST = 'SELECT LAST_INSERT_ROWID() FROM %s' % TABLE_NAME
 # QUERY_REPLACE % ', '.join(['(%s,%s)' % (key, value) for key, value in data_dict])
 QUERY_INSERT = 'INSERT INTO %s (url, title)' % TABLE_NAME + \
                ' VALUES("%s", "%s")'
+
+def encodeURI(query):
+    return urllib.quote(query, safe='~@#$&()*!+=:;,.?/\'');
+
 
 def create_table():
     CURSOR.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='%s'" % (TABLE_NAME))
@@ -30,28 +38,22 @@ def create_table():
 
     query = "CREATE TABLE %s(%s)" % (TABLE_NAME, ','.join(PAPERS_VARS))
     query = query.replace('AUTO_INCREMENT', 'AUTOINCREMENT').replace('INT(11)', 'INTEGER')
+    CURSOR.execute(query)
+    CONNECTOR.commit()
+
+def search_papers_db(q):
+    words = q.split()
+    conditions = []
+    for cur_word in words:
+        cur_word = cur_word.lower()
+        enc_word = encodeURI(cur_word).replace('%', '%%')
+        cur_condition = '(LOWER(title) LIKE "%' + cur_word + '%" OR LOWER(summary) LIKE "%' + enc_word + '%")'
+        conditions.append(cur_condition)
+    query = QUERY_SELECT_WITH_QUERY % ' AND '.join(conditions)
     print query
     CURSOR.execute(query)
-    CONNECTOR.commit()
-
-"""
-def get_from_db(keys):
-    query = QUERY_SELECT_IN % ','.join(['"%s"' % cur_key for cur_key in keys])
-    CURSOR.execute(query)
-    results = {i[0]: i[1] for i in CURSOR.fetchall()}
+    results = CURSOR.fetchall()
     return results
-
-def get_like_from_db(key):
-    query = QUERY_SELECT_LIKE % key
-    CURSOR.execute(query)
-    results = {i[0]: i[1] for i in CURSOR.fetchall()}
-    return results
-def update_db(data_dict):
-    query = QUERY_REPLACE % ', '.join(['("%s", "%s")' % (key, value) for key, value in data_dict.iteritems()])
-    CURSOR.execute(query)
-    CONNECTOR.commit()
-"""
-
 
 def get_papers_db():
     query = QUERY_SELECT_ALL

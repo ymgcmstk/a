@@ -1,8 +1,12 @@
 body {
-    padding-top: 2rem;
+    padding-top: 1rem;
     padding-bottom: 2rem;
     font-family: PT Sans,Helvetica Neue,Arial,Hiragino Kaku Gothic Pro,Meiryo,MS PGothic,sans-serif;
     font-size: 18px;
+}
+
+form .input-group input {
+    height: 28px;
 }
 
 h1 {

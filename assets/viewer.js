@@ -65,4 +65,11 @@ $(function(){
         if (i == 0) $(elem).trigger('click');
     });
 
+    $('#searchbtn').click(function(event){
+        event.preventDefault();
+        var query = $('#searchinput').val();
+        if (query.length > 0) window.location.href = '/?q=' + encodeURI(query);
+        else window.location.href = '/';
+    });
+
 });
