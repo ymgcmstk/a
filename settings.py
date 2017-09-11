@@ -3,9 +3,9 @@
 
 import os
 import sqlite3
-from mytoolbox import makedirs_if_missing, makebsdirs_if_missing
+from mytoolbox import makedirs_if_missing, makebsdirs_if_missing, touch, resolve_ip
 
-HOST_NAME = '0.0.0.0'
+HOST_NAME = resolve_ip()
 PORT = 10006
 PORT_VIEWER = PORT + 1016
 ROOT_DIR = os.path.dirname(os.path.abspath(os.path.join(os.getcwd(), __file__)))
@@ -47,7 +47,3 @@ PAPER_INFO = ['id', 'title', 'summary', 'url', 'n_images', 'updated_at', 'create
 
 ARXIV_ABS_URL = 'https://arxiv.org/abs/%s'
 ARXIV_PDF_URL = 'https://arxiv.org/pdf/%s.pdf'
-
-def touch(fname, times=None):
-    with open(fname, 'a'):
-        os.utime(fname, times)

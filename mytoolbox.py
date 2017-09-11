@@ -893,3 +893,14 @@ def get_html(url, cache=False):
     if cache:
         textdump(fname, [html])
     return html
+
+def touch(fname, times=None):
+    with open(fname, 'a'):
+        os.utime(fname, times)
+
+def resolve_ip():
+    hostname = socket.gethostname()
+    try:
+        return socket.gethostbyname(hostname)
+    except:
+        return '127.0.0.1'
