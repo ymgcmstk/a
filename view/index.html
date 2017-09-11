@@ -39,10 +39,10 @@
       <div id="notes">
         <table class="table">
           <thead>
-            <tr><th>Note Title</th><th>Status</th><tr>
+            <tr><th>Note Title</th><th>Status</th><th>Last Updated (GMT)</th><tr>
           </thead>
           <tbody>
-            % for paper_id, title, display in papers:
+            % for paper_id, title, display, updated_at in papers:
             <tr>
               <td><a href="http://{{server}}:{{port}}/memo/{{str(paper_id)}}">
                   % if display == 1:
@@ -60,6 +60,7 @@
                   % end
                 </a>
               </td>
+              <td>{{updated_at}}</td>
             </tr>
             % end
           </tbody>

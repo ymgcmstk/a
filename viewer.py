@@ -30,6 +30,8 @@ def memo(paper_id):
     paper_info = get_paper_info_db(paper_id, PAPER_INFO)
     if paper_info['summary'] is None:
         paper_info['summary'] = ""
+    if paper_info['display'] == 0:
+        redirect('/')
     return template('view/memo_viewer.html',
                     server=HOST_NAME,
                     port=PORT_VIEWER,

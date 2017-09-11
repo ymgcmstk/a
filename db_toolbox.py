@@ -13,9 +13,9 @@ QUERY_UPDATE_DISPLAY = 'UPDATE %s ' % TABLE_NAME + \
 
 QUERY_SELECT = 'SELECT %s' + ' FROM %s ' % TABLE_NAME + \
                'WHERE id = %s'
-QUERY_SELECT_ALL = 'SELECT id, title FROM %s ' % TABLE_NAME + \
+QUERY_SELECT_ALL = 'SELECT id, title, updated_at FROM %s ' % TABLE_NAME + \
                    'WHERE display = 1 ORDER BY updated_at DESC' #  LIMIT 30
-QUERY_SELECT_ALL_FULL = 'SELECT id, title, display FROM %s ' % TABLE_NAME + \
+QUERY_SELECT_ALL_FULL = 'SELECT id, title, display, updated_at FROM %s ' % TABLE_NAME + \
                    'ORDER BY updated_at DESC' #  LIMIT 30
 QUERY_LAST = 'SELECT LAST_INSERT_ROWID() FROM %s' % TABLE_NAME
 # QUERY_REPLACE % ', '.join(['(%s,%s)' % (key, value) for key, value in data_dict])

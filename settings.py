@@ -43,7 +43,7 @@ PAPERS_VARS = [
     'display INTEGER DEFAULT 1',
 ]
 
-PAPER_INFO = ['id', 'title', 'summary', 'url', 'n_images', 'updated_at', 'created_at']
+PAPER_INFO = ['id', 'title', 'summary', 'url', 'n_images', 'updated_at', 'created_at', 'display']
 
 ARXIV_ABS_URL = 'https://arxiv.org/abs/%s'
 ARXIV_PDF_URL = 'https://arxiv.org/pdf/%s.pdf'

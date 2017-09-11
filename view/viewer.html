@@ -15,14 +15,20 @@
   <body>
     <div class="container">
       <div>
-        <div>Notes:</div>
-        <ul>
-          % for paper_id, title in papers:
-          <li>
-            <a href="http://{{server}}:{{port}}/memo/{{str(paper_id)}}">{{title}}</a>
-          </li>
-          % end
-        </ul>
+        <table class="table">
+          <thead>
+            <tr><th>Note Title</th><th>Last Updated (GMT)</th><tr>
+          </thead>
+          <tbody>
+            % for paper_id, title, updated_at in papers:
+            <tr>
+              <td><a href="http://{{server}}:{{port}}/memo/{{str(paper_id)}}">{{title}}</a></td>
+              <td>{{updated_at}}</td>
+            </tr>
+            % end
+          </tbody>
+        </table>
+
       </div>
     </div>
   </body>
