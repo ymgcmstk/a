@@ -15,8 +15,8 @@
     <div class="container">
       <div class="row">
         <form class="navbar-form navbar-right" role="search">
-          <span class="irregular">Hi {{username}}.</span>
-          <a class="irregular" href="//{{server}}:{{int(port)+1016}}">Top page</a>
+          <span class="irregular">Hi {{user}}.</span>
+          <a class="irregular" href="//{{server}}:{{int(port)}}">Top page</a>
           <div class="input-group">
             <input id="searchinput" type="text" class="form-control" placeholder="Search" name="search">
             <div class="input-group-btn">
@@ -26,22 +26,22 @@
         </form>
       </div>
       <div id="form">
-        <form method="post" action="/" class="form-inline">
+        <form method="post" action="/member/{{user_id}}" class="form-inline">
           <label>Page title: </label>
           <input type="text" name="pagetitle" id="pagetitle" class="form-control">
-          <button id="paperbtn" class="btn btn-default">submit</button>
+          <button id="notebtn" class="btn btn-default">submit</button>
         </form>
         <div>or,</div>
-        <form method="post" action="/" class="form-inline">
+        <form method="post" action="/member/{{user_id}}" class="form-inline">
           <label>PDF URL: </label>
           <input type="text" name="pdfurl" id="pdfurl" class="form-control">
           <span>, and</span>
-          <label>Paper title: </label>
+          <label>Note title: </label>
           <input type="text" name="pdftitle" id="pdftitle" class="form-control">
-          <button id="paperbtn" class="btn btn-default">submit</button>
+          <button id="notebtn" class="btn btn-default">submit</button>
         </form>
         <div>or,</div>
-        <form method="post" action="/" class="form-inline">
+        <form method="post" action="/member/{{user_id}}" class="form-inline">
           <label>arXiv ID: </label>
           <input type="text" name="arxivid" id="arxivid" class="form-control">
           <button id="searchbtn" class="btn btn-default">submit</button>
@@ -54,9 +54,9 @@
             <tr><th>Note Title</th><th>Status</th><th>Last Updated (GMT)</th></tr>
           </thead>
           <tbody>
-            % for paper_id, title, display, updated_at in papers:
+            % for note_id, title, display, updated_at in notes:
             <tr>
-              <td><a href="http://{{server}}:{{port}}/memo/{{str(paper_id)}}">
+              <td><a href="http://{{server}}:{{port}}/note/{{str(note_id)}}">
                   % if display == 1:
                   {{title}}
                   % else:
@@ -64,7 +64,7 @@
                   % end
               </a></td>
               <td>
-                <a href="http://{{server}}:{{port}}/display/{{str(paper_id)}}">
+                <a href="http://{{server}}:{{port}}/display/{{str(note_id)}}">
                   % if display == 1:
                   Shown
                   % else:

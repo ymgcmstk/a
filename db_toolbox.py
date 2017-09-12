@@ -4,44 +4,61 @@
 from settings import *
 import urllib
 
-QUERY_UPDATE = 'UPDATE %s ' % TABLE_NAME + \
+QUERY_UPDATE = 'UPDATE %s ' % NOTES_TABLE_NAME + \
                'SET updated_at = datetime("now"), summary = "%s", title="%s" WHERE id = %s;'
-QUERY_UPDATE_N_IMAGES = 'UPDATE %s ' % TABLE_NAME + \
+QUERY_UPDATE_N_IMAGES = 'UPDATE %s ' % NOTES_TABLE_NAME + \
                         'SET updated_at = datetime("now"), n_images = %s WHERE id = %s;'
-QUERY_UPDATE_DISPLAY = 'UPDATE %s ' % TABLE_NAME + \
+QUERY_UPDATE_DISPLAY = 'UPDATE %s ' % NOTES_TABLE_NAME + \
                        'SET display = 1 - display WHERE id = %s;'
 
-QUERY_SELECT = 'SELECT %s' + ' FROM %s ' % TABLE_NAME + \
+QUERY_SELECT = 'SELECT %s' + ' FROM %s ' % NOTES_TABLE_NAME + \
                'WHERE id = %s'
-QUERY_SELECT_ALL = 'SELECT id, title, updated_at FROM %s ' % TABLE_NAME + \
+QUERY_SELECT_ALL = 'SELECT id, title, updated_at FROM %s ' % NOTES_TABLE_NAME + \
                    'WHERE display = 1 ORDER BY updated_at DESC' #  LIMIT 30
-QUERY_SELECT_ALL_FULL = 'SELECT id, title, display, updated_at FROM %s ' % TABLE_NAME + \
+QUERY_SELECT_ALL_FULL = 'SELECT id, title, display, updated_at FROM %s ' % NOTES_TABLE_NAME + \
                    'ORDER BY updated_at DESC' #  LIMIT 30
 
-QUERY_SELECT_WITH_QUERY = 'SELECT id, title, updated_at FROM %s ' % TABLE_NAME + \
+QUERY_SELECT_WITH_QUERY = 'SELECT id, title, updated_at FROM %s ' % NOTES_TABLE_NAME + \
                           'WHERE display = 1 AND %s ORDER BY updated_at DESC' #  LIMIT 30
 
-QUERY_LAST = 'SELECT LAST_INSERT_ROWID() FROM %s' % TABLE_NAME
+QUERY_LAST = 'SELECT LAST_INSERT_ROWID() FROM %s' % NOTES_TABLE_NAME
 # QUERY_REPLACE % ', '.join(['(%s,%s)' % (key, value) for key, value in data_dict])
-QUERY_INSERT = 'INSERT INTO %s (url, title)' % TABLE_NAME + \
-               ' VALUES("%s", "%s")'
+QUERY_INSERT = 'INSERT INTO %s (url, title, user_id)' % NOTES_TABLE_NAME + \
+               ' VALUES("%s", "%s", %s)'
+
+### FOR USER TABLE
+QUERY_INSERT_USER = 'INSERT INTO %s (user, password)' % USERS_TABLE_NAME + \
+                    ' VALUES("%s", "%s")'
+QUERY_SELECT_USER = 'SELECT %s' + ' FROM %s ' % USERS_TABLE_NAME + \
+                    'WHERE id = %s'
+QUERY_SELECT_WITH_NAME_USER = 'SELECT %s' + ' FROM %s ' % USERS_TABLE_NAME + \
+                              'WHERE user = "%s"'
+QUERY_LAST_USER = 'SELECT LAST_INSERT_ROWID() FROM %s' % USERS_TABLE_NAME
+# QUERY_REPLACE % ', '.join(['(%s,%s)' % (key, value) for key, value in data_dict])
+
+
 
 def encodeURI(query):
     return urllib.quote(query, safe='~@#$&()*!+=:;,.?/\'');
 
-
 def create_table():
-    CURSOR.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='%s'" % (TABLE_NAME))
+    CURSOR.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='%s'" % (NOTES_TABLE_NAME))
     temp = CURSOR.fetchone()
-    if temp[0] > 0:
-        return
+    if temp[0] == 0:
+        query = "CREATE TABLE %s(%s)" % (NOTES_TABLE_NAME, ','.join(NOTES_VARS))
+        query = query.replace('AUTO_INCREMENT', 'AUTOINCREMENT').replace('INT(11)', 'INTEGER')
+        CURSOR.execute(query)
+        CONNECTOR.commit()
 
-    query = "CREATE TABLE %s(%s)" % (TABLE_NAME, ','.join(PAPERS_VARS))
-    query = query.replace('AUTO_INCREMENT', 'AUTOINCREMENT').replace('INT(11)', 'INTEGER')
-    CURSOR.execute(query)
-    CONNECTOR.commit()
+    CURSOR.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='%s'" % (USERS_TABLE_NAME))
+    temp = CURSOR.fetchone()
+    if temp[0] == 0:
+        query = "CREATE TABLE %s(%s)" % (USERS_TABLE_NAME, ','.join(USERS_VARS))
+        query = query.replace('AUTO_INCREMENT', 'AUTOINCREMENT').replace('INT(11)', 'INTEGER')
+        CURSOR.execute(query)
+        CONNECTOR.commit()
 
-def search_papers_db(q):
+def search_notes_db(q):
     words = q.split()
     conditions = []
     for cur_word in words:
@@ -55,52 +72,85 @@ def search_papers_db(q):
     results = CURSOR.fetchall()
     return results
 
-def get_papers_db():
+def get_notes_db():
     query = QUERY_SELECT_ALL
     CURSOR.execute(query)
     results = CURSOR.fetchall()
     return results
 
-def get_papers_full_db():
+def get_notes_full_db():
     query = QUERY_SELECT_ALL_FULL
     CURSOR.execute(query)
     results = CURSOR.fetchall()
     return results
 
-def get_paper_info_db(paper_id, keys):
-    query = QUERY_SELECT % (','.join(keys), paper_id)
+def get_note_info_db(note_id, keys):
+    query = QUERY_SELECT % (','.join(keys), note_id)
+    print query
     CURSOR.execute(query)
     results = {key: val for key, val in zip(keys, CURSOR.fetchall()[0])}
     return results
 
-def get_n_images_db(paper_id):
-    query = QUERY_SELECT % ('n_images', paper_id)
+def get_n_images_db(note_id):
+    query = QUERY_SELECT % ('n_images', note_id)
     CURSOR.execute(query)
     return CURSOR.fetchall()[0][0]
 
-def update_papers_db(paper_id, summary, title):
-    query = QUERY_UPDATE % (summary.replace('"', "'"), title.replace('"', "'"), paper_id)
+def update_notes_db(note_id, summary, title):
+    query = QUERY_UPDATE % (summary.replace('"', "'"), title.replace('"', "'"), note_id)
     print query
     CURSOR.execute(query)
     CONNECTOR.commit()
 
-def update_n_images_db(paper_id, n_images):
-    query = QUERY_UPDATE_N_IMAGES % (n_images, paper_id)
+def update_n_images_db(note_id, n_images):
+    query = QUERY_UPDATE_N_IMAGES % (n_images, note_id)
     CURSOR.execute(query)
     CONNECTOR.commit()
 
-def update_display_db(paper_id):
-    query = QUERY_UPDATE_DISPLAY % (paper_id)
+def update_display_db(note_id):
+    query = QUERY_UPDATE_DISPLAY % (note_id)
     CURSOR.execute(query)
     CONNECTOR.commit()
 
-def insert_empty_paper(title, url):
-    query = QUERY_INSERT % (url, title.replace('"', "'"))
+def insert_empty_note(title, url, user_id):
+    query = QUERY_INSERT % (url, title.replace('"', "'"), str(user_id))
     print query
     CURSOR.execute(query)
     CONNECTOR.commit()
 
     query = QUERY_LAST
     CURSOR.execute(query)
-    paper_id = CURSOR.fetchall()[0][0]
-    return paper_id
+    note_id = CURSOR.fetchall()[0][0]
+    return note_id
+
+# for user table
+def add_user(user, password):
+    query = QUERY_INSERT_USER % (user, password)
+    CURSOR.execute(query)
+    CONNECTOR.commit()
+
+    query = QUERY_LAST_USER
+    CURSOR.execute(query)
+    user_id = CURSOR.fetchall()[0][0]
+    return user_id
+
+def get_user_id(user, password=None):
+    if password is None:
+        query = QUERY_SELECT_WITH_NAME_USER % ('id', user)
+        CURSOR.execute(query)
+        user_id = CURSOR.fetchall()[0][0]
+        return user_id
+    else:
+        query = QUERY_SELECT_WITH_NAME_USER % ('id, password', user)
+        print query
+        CURSOR.execute(query)
+        results = CURSOR.fetchall()
+        if len(results) == 1:
+            user_id, org_password = results[0]
+            if password == org_password:
+                return user_id
+            else:
+                return -1
+        assert len(results) == 0
+        # return -1
+        return add_user(user, password)

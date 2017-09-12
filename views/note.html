@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>QuillNote: {{paper_info['title']}}</title>
+    <title>QuillNote: {{note_info['title']}}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
     <meta http-equiv="Content-Style-Type" content="text/css">
     <meta http-equiv="Content-Script-Type" content="text/javascript">
@@ -19,25 +19,42 @@
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/quill/1.3.2/quill.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/quill-image-drop-module@1.0.3/image-drop.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cropper/3.0.0/cropper.js"></script>
+    <script src="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
 
-    <link href="//{{server}}:{{port}}/assets/memo.css" rel="stylesheet">
+    <link href="//{{server}}:{{port}}/assets/note.css" rel="stylesheet">
 
   </head>
 
   <body>
     <div class="container">
-      <a href="..">back</a>
-      <div id="data" style="display: none;" data-nimages="{{paper_info['n_images']}}" data-server="{{server}}" data-port="{{port}}" data-paperid="{{paper_info['id']}}" data-summary="{{paper_info['summary']}}"></div>
+      <div id="data" style="display: none;" data-nimages="{{note_info['n_images']}}" data-server="{{server}}" data-port="{{port}}" data-noteid="{{note_info['id']}}" data-summary="{{note_info['summary']}}"></div>
 
       <div>
-        <h1 id="title"><a href="{{paper_info['url']}}">{{paper_info['title']}}</a></h1>
+        <h1 id="title" contenteditable="true">{{note_info['title']}}</h1>
       </div>
       <div id="editor-container">
         <div id="quill-container">
         </div>
       </div>
 
-      <script type="text/javascript" src="http://{{server}}:{{port}}/assets/memo_viewer.js"></script>
+      <script type="text/javascript" src="http://{{server}}:{{port}}/assets/note.js"></script>
+      <hr>
+      <a href="./{{note_info['user_id']}">back</a>
+      <div id="images">
+        <div id="comment">
+        </div>
+        <button type="button" id="button-prev" data-role="none" class="slick-prev slick-arrow" aria-label="Previous" role="button" style="display:none;">
+          Previous
+        </button>
+        <div id="slider" class="center-item">
+        </div>
+        <button type="button" id="button-next" data-role="none" class="slick-next slick-arrow" aria-label="Next" role="button" style="display:none;">
+          Next
+        </button>
+      </div>
     </div>
   </body>
 </html>

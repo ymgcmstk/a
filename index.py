@@ -1,13 +1,53 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from bottle import route, run, template, post, static_file, request, redirect
+from bottle import route, run, template, post, static_file, request, redirect, default_app
+from beaker.middleware import SessionMiddleware
 from db_toolbox import *
 from settings import *
 from mytoolbox import get_html, full_listdir
 import commands
 import cv2
 import hashlib
+import json
+
+session_opts = {
+    'session.type': 'file',
+    'session.data_dir': './data',
+    'session.cookie_expires': True,
+    'session.auto': True
+}
+
+def session_get(key):
+    session = request.environ.get('beaker.session')
+    if key in session:
+        return session[key]
+    return None
+
+def session_set(key, val):
+    session = request.environ.get('beaker.session')
+    session[key] = val
+    session.save()
+
+def check_user_consistency(note_id=None, user=None):
+    if note_id is not None:
+        assert user is None
+        note_user_id = get_note_info_db(note_id, ['user_id'])['user_id']
+        assert str(note_user_id) == str(session_get('user_id'))
+        return note_user_id
+    assert user is not None
+    cur_user_id = get_user_id(user)
+    assert str(cur_user_id) == str(session_get('user_id'))
+    return cur_user_id
+
+def get_user_from_session():
+    user = session_get('user')
+    if user is None:
+        return None
+    if len(user) == 0:
+        return None
+    user_id = session_get('user_id')
+    return user, user_id
 
 @route('/static/<filename1>/<filename2>')
 def get_static_file(filename1, filename2):
@@ -19,15 +59,41 @@ def get_asset_file(filename):
 
 @route('/')
 def index():
-    papers = get_papers_full_db()
-    return template('view/index.html',
+    if 'q' in request.query:
+        query = request.query['q']
+        notes = search_notes_db(query)
+    else:
+        notes = get_notes_db()
+    user, user_id = get_user_from_session()
+    return template('views/index.html',
                     server=HOST_NAME,
                     port=PORT,
-                    papers=papers,
-                    username='TODO')
+                    notes=notes,
+                    user=user,
+                    user_id=user_id)
 
-@post('/')
-def index_post():
+@route('/member/<user_id>')
+def member(user_id):
+    my_id = session_get('user_id')
+    if user_id == str(my_id):
+        notes = get_notes_full_db()
+        return template('views/mypage.html',
+                        server=HOST_NAME,
+                        port=PORT,
+                        notes=notes,
+                        user=session_get('user'),
+                        user_id=user_id)
+    else:
+        notes = get_notes_full_db()
+        return template('views/index.html',
+                        server=HOST_NAME,
+                        port=PORT,
+                        notes=notes,
+                        user=session_get('user'))
+
+@post('/member/<user_id>')
+def member_post(user_id):
+    assert str(user_id) == str(session_get('user_id'))
     if 'pagetitle' in request.forms.keys():
         pdf_url = ''
         title = request.forms.get('pagetitle')
@@ -43,46 +109,58 @@ def index_post():
     else:
         pdf_url = request.forms.get('pdfurl')
         title = request.forms.get('pdftitle')
-    paper_id = insert_empty_paper(title, pdf_url)
+    note_id = insert_empty_note(title, pdf_url, user_id)
 
     if len(pdf_url) > 0:
         print './pdf2jpg.sh "%s" "%s" & ' % (
             pdf_url,
-            str(paper_id)
+            str(note_id)
         )
         os.system('./pdf2jpg.sh "%s" "%s" & ' % (
             pdf_url,
-            str(paper_id)
+            str(note_id)
         ))
     else:
         # update n_images
-        update_n_images_db(paper_id, '0')
-    redirect('/memo/%s' % str(paper_id))
+        update_n_images_db(note_id, '0')
+    redirect('/note/%s' % str(note_id))
 
-@route('/memo/<paper_id>')
-def memo(paper_id):
-    paper_info = get_paper_info_db(paper_id, PAPER_INFO)
-    if paper_info['summary'] is None:
-        paper_info['summary'] = ""
-    return template('view/memo.html',
+@route('/note/<note_id>')
+def note(note_id):
+    check_user_consistency(note_id=note_id)
+    note_info = get_note_info_db(note_id, NOTE_INFO)
+    if note_info['summary'] is None:
+        note_info['summary'] = ""
+    return template('views/note.html',
                     server=HOST_NAME,
                     port=PORT,
-                    paper_info=paper_info)
+                    note_info=note_info)
 
-@post('/memo/save/<paper_id>')
-def save(paper_id):
+@post('/save/<note_id>')
+def save(note_id):
+    check_user_consistency(note_id=note_id)
     summary = request.forms.get('summary')
     title = request.forms.get('title')
-    update_papers_db(paper_id, summary, title)
+    update_notes_db(note_id, summary, title)
 
-@route('/memo/crop/<paper_id>/<x>/<y>/<w>/<h>/<im_i>')
-def crop(paper_id, x, y, w, h, im_i):
+@post('/load/<note_id>')
+def load(note_id):
+    note_info = get_note_info_db(note_id, NOTE_INFO)
+    if note_info['summary'] is None:
+        note_info['summary'] = ""
+    if note_info['display'] == 0:
+        for pkey in note_info.keys():
+            note_info[pkey] = ""
+    return json.dumps(note_info)
+
+@route('/crop/<note_id>/<x>/<y>/<w>/<h>/<im_i>')
+def crop(note_id, x, y, w, h, im_i):
     x = int(x)
     y = int(y)
     w = int(w)
     h = int(h)
     image_i = int(im_i)
-    hash_str = '%d-%d-%d-%d-%d-%s' % (x, y, w, h, image_i, str(paper_id))
+    hash_str = '%d-%d-%d-%d-%d-%s' % (x, y, w, h, image_i, str(note_id))
     md5_hash = hashlib.md5(hash_str).hexdigest()
     img_path = os.path.join(IMCACHE_DIR, md5_hash + '.jpg')
     if os.path.exists(img_path):
@@ -90,7 +168,7 @@ def crop(paper_id, x, y, w, h, im_i):
         return static_file(md5_hash + '.jpg', root=IMCACHE_DIR)
         # return md5_hash + '.jpg'
 
-    org_path = os.path.join(DATA_DIR, 'data_' + str(paper_id), 'out-%d.jpg' % image_i)
+    org_path = os.path.join(DATA_DIR, 'data_' + str(note_id), 'out-%d.jpg' % image_i)
     assert os.path.exists(org_path)
     img = cv2.imread(org_path)
     crop_img = img[y:y+h, x:x+w]
@@ -98,18 +176,41 @@ def crop(paper_id, x, y, w, h, im_i):
     print md5_hash + '.jpg has been generated.'
     return static_file(md5_hash + '.jpg', root=IMCACHE_DIR)
 
-@route('/memo/n_images/<paper_id>')
-def get_n_images(paper_id):
-    n_images = get_n_images_db(paper_id)
-    base_dir = os.path.join(DATA_DIR, 'data_' + str(paper_id))
+@route('/n_images/<note_id>')
+def get_n_images(note_id):
+    n_images = get_n_images_db(note_id)
+    base_dir = os.path.join(DATA_DIR, 'data_' + str(note_id))
     if n_images == -1 and os.path.exists(os.path.join(base_dir, 'fin')):
         n_images = len([1 for i in os.listdir(base_dir) if i.endswith('.jpg')]) - 1
-        update_n_images_db(paper_id, str(n_images))
+        update_n_images_db(note_id, str(n_images))
     return str(n_images)
 
-@route('/display/<paper_id>')
-def display(paper_id):
-    update_display_db(paper_id)
+@route('/display/<note_id>')
+def display(note_id):
+    check_user_consistency(note_id=note_id)
+    update_display_db(note_id)
+    user_id = session_get('user_id')
+    redirect('/member/' + str(user_id))
+
+@route('/login')
+def login():
+    return template('views/login.html',
+                    server=HOST_NAME,
+                    port=PORT)
+
+@post('/login')
+def login_post():
+    user = request.forms.get('username')
+    password = hashlib.md5(request.forms.get('password')).hexdigest()
+    user_id = get_user_id(user, password)
+    if user_id >= 0:
+        session_set('user_id', user_id)
+        session_set('user', user)
+        session_set('message', 'Hi %s' % user)
+    else:
+        session_set('user_id', user_id)
+        session_set('user', '')
+        session_set('message', 'Log-in failed.')
     redirect('/')
 
 def clean_up_images():
@@ -120,6 +221,9 @@ def clean_up_images():
         os.remove(im_files[i])
 
 if __name__ == '__main__':
+    app = default_app()
+    app = SessionMiddleware(app, session_opts)
+
     create_table()
     clean_up_images()
-    run(host=HOST_NAME, port=PORT, debug=True, reloader=True)
+    run(app=app, host=HOST_NAME, port=PORT, debug=True, reloader=True)

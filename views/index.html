@@ -25,11 +25,11 @@
     <div class="container">
       <div class="row">
         <form class="navbar-form navbar-right" role="search">
-          % if username is None:
-          <a class="irregular" href="//{{server}}:{{int(port)+1016}}/fuck">Log-in</a>
+          % if user is None:
+          <a class="irregular" href="//{{server}}:{{int(port)}}/login">Log-in</a>
           % else:
-          <span class="irregular">Hi {{username}}.</span>
-          <a class="irregular" href="//{{server}}:{{int(port)-1016}}">My Page</a>
+          <span class="irregular">Hi {{user}}.</span>
+          <a class="irregular" href="//{{server}}:{{int(port)}}/member/{{user_id}}">My Page</a>
           % end
           <div class="input-group">
             <input id="searchinput" type="text" class="form-control" placeholder="Search" name="search">
@@ -45,9 +45,9 @@
             <tr><th>Note Title</th><th>Last Updated (GMT)</th></tr>
           </thead>
           <tbody>
-            % for paper_id, title, updated_at in papers:
+            % for note_id, title, updated_at in notes:
             <tr>
-              <td><a class="note" href="#" data-paperid="{{paper_id}}">{{title}}</a></td>
+              <td><a class="note" href="#" data-noteid="{{note_id}}">{{title}}</a></td>
               <td>{{updated_at}}</td>
             </tr>
             % end
