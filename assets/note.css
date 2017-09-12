@@ -1,0 +1,91 @@
+body {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  font-family: PT Sans,Helvetica Neue,Arial,Hiragino Kaku Gothic Pro,Meiryo,MS PGothic,sans-serif;
+}
+
+h1 {
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-bottom: 15px;
+}
+
+#title a {
+  color: black;
+}
+
+h3 {
+  margin-top: 2rem;
+}
+
+.row {
+  margin-bottom: 1rem;
+}
+.row .row {
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+[class*="col-"] {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  background-color: rgba(86,61,124,.15);
+  border: 1px solid rgba(86,61,124,.2);
+}
+
+hr {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+#quill-container {
+  height: auto;
+  min-height: 100%;
+}
+
+#quill-container .ql-editor {
+  height: auto;
+  font-size: 18px;
+}
+
+
+.slick-prev:before, .slick-next:before {
+    color: #000;
+    font-size: 40px;
+}
+
+ul .slick-next {
+    right: 20px;
+    z-index: 99;
+}
+ul .slick-prev {
+    left: 15px;
+    z-index: 100;
+}
+.slick-dots li.slick-active button:before,
+.slick-dots li button:before {
+    color: #fff;
+}
+.slick-slide{
+    height: auto;
+}
+
+#images img {
+    max-width: 100%;
+    height: auto;
+}
+#images {
+    position: relative;
+}
+#images .slick-next {
+    right: 20px;
+    z-index: 99;
+}
+#images .slick-prev {
+    left: 15px;
+    z-index: 100;
+}
+
+[contenteditable="true"]:focus{
+    outline: 0;
+}

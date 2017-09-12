@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <title>QuillNote: Log-in</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//{{server}}:{{port}}/assets/index.css" rel="stylesheet">
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="form">
+        <form method="post" action="/login" class="form-inline">
+          <label>User name: </label>
+          <input type="text" name="username" id="username" class="form-control">
+          <label>Password: </label>
+          <input type="password" name="password" id="password" class="form-control">
+          <button id="loginbtn" class="btn btn-default">Log-in</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
