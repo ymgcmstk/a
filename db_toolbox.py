@@ -9,7 +9,7 @@ QUERY_UPDATE = 'UPDATE %s ' % TABLE_NAME + \
 QUERY_UPDATE_N_IMAGES = 'UPDATE %s ' % TABLE_NAME + \
                         'SET updated_at = datetime("now"), n_images = %s WHERE id = %s;'
 QUERY_UPDATE_DISPLAY = 'UPDATE %s ' % TABLE_NAME + \
-                       'SET updated_at = datetime("now"), display = 1 - display WHERE id = %s;'
+                       'SET display = 1 - display WHERE id = %s;'
 
 QUERY_SELECT = 'SELECT %s' + ' FROM %s ' % TABLE_NAME + \
                'WHERE id = %s'

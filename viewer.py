@@ -26,7 +26,8 @@ def index():
     return template('view/viewer.html',
                     server=HOST_NAME,
                     port=PORT_VIEWER,
-                    papers=papers)
+                    papers=papers,
+                    username='TODO')
 
 """
 @route('/memo/<paper_id>')

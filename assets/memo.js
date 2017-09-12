@@ -98,6 +98,16 @@ $(function(){
     }
     // --------- basic functions ---------
 
+    // set up quill
+
+    // jump to the page top when pasting something if you do not update clipboard module
+    var Clipboard = Quill.import('modules/clipboard');
+    class MyClipboard extends Clipboard {
+        onPaste(e) {}
+    }
+    Quill.register('modules/clipboard', MyClipboard, true);
+
+
     var Delta = Quill.import('delta');
     quill = new Quill('#quill-container', {
         modules: {
@@ -120,13 +130,13 @@ $(function(){
         quill.setContents(JSON.parse(org_sum));
     }
 
-    // Store accumulated changes
+    // store accumulated changes
     change = new Delta();
     quill.on('text-change', function(delta) {
         change = change.compose(delta);
     });
 
-    // Save periodically
+    // save periodically
     setInterval(save, 5*1000);
 
     if (n_images < 0) {
@@ -151,7 +161,7 @@ $(function(){
         list_up_images(n_images);
     }
 
-    // Check for unsaved data
+    // check for unsaved data
     window.onbeforeunload = function() {
         if (change.length() > 0 || title_changed) {
             save();
@@ -159,6 +169,7 @@ $(function(){
         }
     }
 
+    // save finall-changed range for pasting images
     quill.on('selection-change', function(range, oldRange, source) {
         if (range) last_range = range.index;
     });
@@ -193,6 +204,7 @@ $(function(){
         }
         this.quill.formatText(range, 'size', demote(cur_size, SIZES));
     });
+    // save
     quill.keyboard.addBinding({
         key: 'S',
         shortKey: true
@@ -200,10 +212,67 @@ $(function(){
         save();
     });
 
+    // update title if changed
     $('#title').blur(function(e){
         title = $('#title').text();
         title_changed = true;
     });
+
+    // add hyperlink when you paste http://~~~ or https://~~~
+    quill.clipboard.addMatcher(Node.TEXT_NODE, function(node, delta) {
+        var regex = /https?:\/\/[^\s]+/g;
+        if(typeof(node.data) !== 'string') return;
+        var matches = node.data.match(regex);
+
+        if(matches && matches.length > 0) {
+            var ops = [];
+            var str = node.data;
+            matches.forEach(function(match) {
+                var split = str.split(match);
+                var beforeLink = split.shift();
+                ops.push({ insert: beforeLink });
+                ops.push({ insert: match, attributes: { link: match } });
+                str = split.join(match);
+            });
+            ops.push({ insert: str });
+            delta.ops = ops;
+        }
+        return delta;
+    });
+    function isWhitespace(ch) {
+        var whiteSpace = false
+        if ((ch == ' ') || (ch == '\t') || (ch == '\n')) {
+            whiteSpace = true;
+        }
+        return whiteSpace;
+    }
+    quill.on('text-change', function(delta, oldDelta, source) {
+        var regex = /https?:\/\/[^\s]+$/;
+        if(delta.ops.length === 2 && delta.ops[0].retain && isWhitespace(delta.ops[1].insert)) {
+            var endRetain = delta.ops[0].retain;
+            var text = quill.getText().substr(0, endRetain);
+            var match = text.match(regex);
+
+            if(match !== null) {
+                var url = match[0];
+
+                var ops = [];
+                if(endRetain > url.length) {
+                    ops.push({ retain: endRetain - url.length });
+                }
+
+                ops = ops.concat([
+                    { delete: url.length },
+                    { insert: url, attributes: { link: url } }
+                ]);
+
+                quill.updateContents({
+                    ops: ops
+                });
+            }
+        }
+    });
+
 });
 
 // quill.insertEmbed(10, 'image', 'https://pbs.twimg.com/profile_images/378800000220029324/fe66faeca20115da8566e51d83447ead_400x400.jpeg');

@@ -15,6 +15,10 @@ h1 {
     padding-bottom: 15px;
 }
 
+.irregular {
+    padding-right: 25px;
+}
+
 a#title {
     color: black;
 }

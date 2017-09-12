@@ -23,7 +23,8 @@ def index():
     return template('view/index.html',
                     server=HOST_NAME,
                     port=PORT,
-                    papers=papers)
+                    papers=papers,
+                    username='TODO')
 
 @post('/')
 def index_post():

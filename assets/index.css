@@ -1,16 +1,24 @@
 body {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-  font-family: PT Sans,Helvetica Neue,Arial,Hiragino Kaku Gothic Pro,Meiryo,MS PGothic,sans-serif;
-  font-size: 18px;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    font-family: PT Sans,Helvetica Neue,Arial,Hiragino Kaku Gothic Pro,Meiryo,MS PGothic,sans-serif;
+    font-size: 18px;
+}
+
+form .input-group input {
+    height: 28px;
+}
+
+.irregular {
+    padding-right: 25px;
 }
 
 form {
-  padding: 15px;
+    padding: 15px;
 }
 
 h1 {
-  padding-right: 15px;
-  padding-left: 15px;
-  padding-bottom: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-bottom: 15px;
 }
