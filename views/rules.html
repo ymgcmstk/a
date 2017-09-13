@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>QuillNote: Rules</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="Content-Style-Type" content="text/css">
     <meta http-equiv="Content-Script-Type" content="text/javascript">
 
@@ -14,33 +14,33 @@
   <body>
     <div class="container">
       <div>
-        <h3>���ܥ롼��:</h3>
+        <h3>基本ルール:</h3>
         <ul>
-          <li>������Ǽ������Ƥ��ޤ���XSS��SQL Injection�������Ȼפ��ФǤ���Ȼפ��ޤ������ʤ��Ǥ���������</li>
-          <li>Backup�ϤȤäƤޤ��󡣥ǡ���������������硢�����ԲĤǤ�����λ������������</li>
-          <li>��ǡ��λ�����ǽ��������ޤ�����λ������������</li>
+          <li>性善説で実装しています。XSSやSQL Injectionもやろうと思えばできると思いますがやらないでください。</li>
+          <li>Backupはとってません。データが吹っ飛んだ場合、復元不可です。ご了承ください。</li>
+          <li>突如終了する可能性があります。ご了承ください。</li>
         </ul>
       </div>
       <div>
-        <h3>�Խ��˴ؤ���:</h3>
+        <h3>編集に関して:</h3>
         <ul>
-          <li>ʸ������: Ctrl+&#062; (Mac: Command+&#062;)</li>
-          <li>ʸ���̾�: Ctrl+&#060; (Mac: Command+&#060;)</li>
-          <li>�������Ȳ��: Ctrl+B (Mac: Command+B)</li>
-          <li>��������饤�󲽤Ȳ��: Ctrl+U (Mac: Command+U)</li>
-          <li>��¸: Ctrl+S (Mac: Command+S), �ʤ�����Ū�ˤ����Ū�˼�ư��¸����ޤ�</li>
-          <li>�ֹ�ʤ��ꥹ�Ȳ�: ��Ƭ�� "-" + Tab</li>
-          <li>�ֹ�Ĥ��ꥹ�Ȳ�: ��Ƭ�� "1." + Tab</li>
-          <li>�����å��ܥå���: ��Ƭ�� "[]" + Tab</li>
-          <li>�����å��ܥå���(�����å��Ѥ�): ��Ƭ�� "[x]" + Tab</li>
+          <li>文字拡大: Ctrl+&#062; (Mac: Command+&#062;)</li>
+          <li>文字縮小: Ctrl+&#060; (Mac: Command+&#060;)</li>
+          <li>太字化と解除: Ctrl+B (Mac: Command+B)</li>
+          <li>アンダーライン化と解除: Ctrl+U (Mac: Command+U)</li>
+          <li>保存: Ctrl+S (Mac: Command+S), なお基本的には定期的に自動保存されます</li>
+          <li>番号なしリスト化: 行頭で "-" + Tab</li>
+          <li>番号つきリスト化: 行頭で "1." + Tab</li>
+          <li>チェックボックス: 行頭で "[]" + Tab</li>
+          <li>チェックボックス(チェック済み): 行頭で "[x]" + Tab</li>
         </ul>
       </div>
       <div>
-        <h3>��ʸ�椫��������ڤ��ä�Ž���դ���:</h3>
+        <h3>論文中から画像を切り取って貼り付ける:</h3>
         <ul>
-          <li>(�Ρ��Ⱥ�������arXiv ID�⤷����PDF URL����ꤷ�ƺ������Ƥ��뤳�Ȥ����󡣤Ĥޤ�Page Title�����Ϥ��Ƴ��Ϥ����礳�ε�ǽ�������Բ�ǽ��)</li>
-          <li>�Ρ��Ⱥ�����1ʬ���٤�����PDF�ν������Ԥ�졢���θ��Խ��ڡ����β���������ʸ�β�����ɽ������롣</li>
-          <li>�ڤ����Τ��ڤ��äƻȤ���</li>
+          <li>(ノート作成時にarXiv IDもしくはPDF URLを指定して作成していることが前提。つまりPage Titleを入力して開始する場合この機能は利用不可能。)</li>
+          <li>ノート作成後1分程度かけてPDFの処理が行われ、その後編集ページの下の方に論文の画像が表示される。</li>
+          <li>切り取るだけ。</li>
         </ul>
       </div>
     </div>
