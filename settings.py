@@ -7,7 +7,7 @@ from mytoolbox import makedirs_if_missing, makebsdirs_if_missing, touch, resolve
 
 HOST_NAME = resolve_ip()
 PORT = 10023
-PORT_VIEWER = PORT + 1016
+# PORT_VIEWER = PORT + 1016
 ROOT_DIR = os.path.dirname(os.path.abspath(os.path.join(os.getcwd(), __file__)))
 DATA_DIR = os.path.join(ROOT_DIR, 'data')
 FILE_DIR = os.path.join(ROOT_DIR, 'assets')
