@@ -13,10 +13,12 @@ QUERY_UPDATE_DISPLAY = 'UPDATE %s ' % NOTES_TABLE_NAME + \
 
 QUERY_SELECT = 'SELECT %s' + ' FROM %s ' % NOTES_TABLE_NAME + \
                'WHERE id = %s'
-QUERY_SELECT_ALL = 'SELECT id, title, updated_at FROM %s ' % NOTES_TABLE_NAME + \
-                   'WHERE display = 1 ORDER BY updated_at DESC' #  LIMIT 30
+QUERY_SELECT_ALL = 'SELECT notes.id, notes.title, notes.updated_at, user, user_id FROM %s ' % NOTES_TABLE_NAME + \
+                   'INNER JOIN users ON users.id = notes.user_id WHERE display = 1 ORDER BY notes.updated_at DESC' #  LIMIT 30
+QUERY_SELECT_ALL_WITH_USER = 'SELECT notes.id, notes.title, notes.updated_at, user, user_id FROM %s ' % NOTES_TABLE_NAME + \
+                             'INNER JOIN users ON users.id = notes.user_id WHERE display = 1 AND user_id = %s ORDER BY notes.updated_at DESC' #  LIMIT 30
 QUERY_SELECT_ALL_FULL = 'SELECT id, title, display, updated_at FROM %s ' % NOTES_TABLE_NAME + \
-                   'ORDER BY updated_at DESC' #  LIMIT 30
+                        'WHERE user_id = %s ORDER BY updated_at DESC' #  LIMIT 30
 
 QUERY_SELECT_WITH_QUERY = 'SELECT id, title, updated_at FROM %s ' % NOTES_TABLE_NAME + \
                           'WHERE display = 1 AND %s ORDER BY updated_at DESC' #  LIMIT 30
@@ -78,8 +80,15 @@ def get_notes_db():
     results = CURSOR.fetchall()
     return results
 
-def get_notes_full_db():
-    query = QUERY_SELECT_ALL_FULL
+def get_notes_with_user_db(user_id):
+    query = QUERY_SELECT_ALL_WITH_USER % str(user_id)
+    print query
+    CURSOR.execute(query)
+    results = CURSOR.fetchall()
+    return results
+
+def get_notes_full_db(user_id):
+    query = QUERY_SELECT_ALL_FULL % str(user_id)
     CURSOR.execute(query)
     results = CURSOR.fetchall()
     return results
@@ -154,3 +163,6 @@ def get_user_id(user, password=None):
         assert len(results) == 0
         # return -1
         return add_user(user, password)
+
+if __name__ == '__main__':
+    print get_note_info_db(1, NOTE_INFO)

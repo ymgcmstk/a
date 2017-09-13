@@ -2,6 +2,8 @@ $(function(){
 
     var id2info = {};
     var quill;
+    var server = $("#data").data("server");
+    var port = $("#data").data("port");
     // --------- basic functions ---------
     function promote(cur_state, state_list) {
         var i = state_list.indexOf(cur_state);
@@ -13,16 +15,16 @@ $(function(){
         i = Math.max(i - 1, 0);
         return state_list[i];
     }
-    function update_editor(paper_id) {
-        var summary = decodeURI(id2info[paper_id]['summary']);
+    function update_editor(note_id) {
+        var summary = decodeURI(id2info[note_id]['summary']);
         if (summary.length > 0) {
             quill.setContents(JSON.parse(summary));
         } else {
             quill.setContents(JSON.parse('{}'));
         }
-        var title = decodeURI(id2info[paper_id]['title']);
+        var title = decodeURI(id2info[note_id]['title']);
         $('#title').text(title);
-        $('#title').attr('href', id2info[paper_id]['url']);
+        $('#title').attr('href', id2info[note_id]['url']);
     }
     // --------- basic functions ---------
 
@@ -42,18 +44,18 @@ $(function(){
     $('a.note').each(function(i, elem) {
         $(elem).click(function(event){
             event.preventDefault();
-            var paper_id = $(this).data('paperid').toString();
-            if (paper_id in id2info) {
-                update_editor(paper_id);
+            var note_id = $(this).data('noteid').toString();
+            if (note_id in id2info) {
+                update_editor(note_id);
             } else {
                 $.ajax({
-                    url: './load/' + paper_id,
+                    url: 'http://' + server + ':' + port + '/load/' + note_id, // './load/' + note_id,
                     type: 'POST',
                     dataType: 'json',
                     timeout: 5000,
                 }).done(function(data) {
-                    id2info[paper_id] = data;
-                    update_editor(paper_id);
+                    id2info[note_id] = data;
+                    update_editor(note_id);
                 }).fail(function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
                     console.log(textStatus);

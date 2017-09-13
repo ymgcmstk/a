@@ -21,7 +21,7 @@ $(function(){
         return state_list[i];
     }
     function crop(image_i, x, y, w, h, targ_index) {
-        var image_path = './crop/' + note_id + '/' +
+        var image_path = './../crop/' + note_id + '/' +
             parseInt(x).toString() + '/' +
             parseInt(y).toString() + '/' +
             parseInt(w).toString() + '/' +
@@ -55,7 +55,8 @@ $(function(){
             $("#images").remove();
         }
         for (var i = 0; i < n_im; i++) {
-            var cur_url = 'http://' + server + ':' + port + '/static/data_' + note_id + '/out-' + i.toString() + '.jpg'
+            // var cur_url = 'http://' + server + ':' + port + '/static/data_' + note_id + '/out-' + i.toString() + '.jpg'
+            var cur_url = './../static/data_' + note_id + '/out-' + i.toString() + '.jpg'
             var cur_id = 'image' + i.toString();
             if (i == 0) $('#slider').append('<div id="' + cur_id + '"><img id="img' + cur_id + '" src="' + cur_url + '"></div>');
             else $('#slider').append('<div id="' + cur_id + '" style="display:none;"><img id="img' + cur_id + '" src="' + cur_url + '"></div>');

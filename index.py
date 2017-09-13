@@ -43,9 +43,9 @@ def check_user_consistency(note_id=None, user=None):
 def get_user_from_session():
     user = session_get('user')
     if user is None:
-        return None
+        return None, None
     if len(user) == 0:
-        return None
+        return None, None
     user_id = session_get('user_id')
     return user, user_id
 
@@ -65,31 +65,40 @@ def index():
     else:
         notes = get_notes_db()
     user, user_id = get_user_from_session()
+    message = session_get('message')
     return template('views/index.html',
                     server=HOST_NAME,
                     port=PORT,
                     notes=notes,
                     user=user,
-                    user_id=user_id)
+                    user_id=user_id,
+                    my_id=session_get('user_id'),
+                    message=message)
 
 @route('/member/<user_id>')
 def member(user_id):
     my_id = session_get('user_id')
     if user_id == str(my_id):
-        notes = get_notes_full_db()
+        message = session_get('message')
+        notes = get_notes_full_db(user_id)
         return template('views/mypage.html',
                         server=HOST_NAME,
                         port=PORT,
                         notes=notes,
                         user=session_get('user'),
-                        user_id=user_id)
+                        user_id=user_id,
+                        message=message)
     else:
-        notes = get_notes_full_db()
+        # notes = get_notes_full_db()
+        notes = get_notes_with_user_db(user_id)
         return template('views/index.html',
                         server=HOST_NAME,
                         port=PORT,
                         notes=notes,
-                        user=session_get('user'))
+                        user=session_get('user'),
+                        user_id=user_id,
+                        my_id=session_get('user_id'),
+                        message='')
 
 @post('/member/<user_id>')
 def member_post(user_id):
@@ -206,7 +215,7 @@ def login_post():
     if user_id >= 0:
         session_set('user_id', user_id)
         session_set('user', user)
-        session_set('message', 'Hi %s' % user)
+        session_set('message', 'Hi %s.' % user)
     else:
         session_set('user_id', user_id)
         session_set('user', '')
