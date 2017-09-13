@@ -207,6 +207,12 @@ def login():
                     server=HOST_NAME,
                     port=PORT)
 
+@route('/rules')
+def rules():
+    return template('views/rules.html',
+                    server=HOST_NAME,
+                    port=PORT)
+
 @post('/login')
 def login_post():
     user = request.forms.get('username')
