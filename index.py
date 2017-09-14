@@ -209,9 +209,11 @@ def login():
 
 @route('/rules')
 def rules():
+    user_id = session_get('user_id')
     return template('views/rules.html',
                     server=HOST_NAME,
-                    port=PORT)
+                    port=PORT,
+                    user_id=user_id)
 
 @post('/login')
 def login_post():

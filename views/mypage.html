@@ -56,13 +56,13 @@
           </thead>
           <tbody>
             % for note_id, title, display, updated_at in notes:
+            % if display == 1:
             <tr>
+            % else:
+            <tr class="active">
+            % end
               <td><a href="http://{{server}}:{{port}}/note/{{str(note_id)}}">
-                  % if display == 1:
                   {{title}}
-                  % else:
-                  <S>{{title}}</S>
-                  % end
               </a></td>
               <td>
                 <a href="http://{{server}}:{{port}}/display/{{str(note_id)}}">

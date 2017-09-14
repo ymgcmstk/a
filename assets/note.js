@@ -110,6 +110,7 @@ $(function(){
 
 
     var Delta = Quill.import('delta');
+    var Keyboard = Quill.import('modules/keyboard');
     quill = new Quill('#quill-container', {
         modules: {
             toolbar: false,
@@ -181,6 +182,7 @@ $(function(){
     // 2. check its proper character by checking String.fromCharCode(<keyCode>)
 
     // change size
+    // quill.keyboard.addBinding({
     quill.keyboard.addBinding({
         key: '¾', // corresponds to '>'
         shortKey: true,
@@ -211,6 +213,16 @@ $(function(){
         shortKey: true
     }, function(range, context) {
         save();
+    });
+    // go back to my page
+    // the following lines do not work well
+    quill.keyboard.addBinding({
+        key: 13, // Enter
+        shortKey: true
+    }, function(range, context) {
+        save();
+        console.log($('#atag-back').attr('href'));
+        window.location.href = $('#atag-back').attr('href');
     });
 
     // update title if changed

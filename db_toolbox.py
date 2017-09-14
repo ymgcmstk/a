@@ -130,6 +130,7 @@ def insert_empty_note(title, url, user_id):
     query = QUERY_LAST
     CURSOR.execute(query)
     note_id = CURSOR.fetchall()[0][0]
+    update_display_db(note_id) # TO BE CONSIDERED
     return note_id
 
 # for user table
