@@ -46,6 +46,7 @@ def encodeURI(query):
 def create_table():
     CURSOR.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='%s'" % (NOTES_TABLE_NAME))
     temp = CURSOR.fetchone()
+    print temp
     if temp[0] == 0:
         query = "CREATE TABLE %s(%s)" % (NOTES_TABLE_NAME, ','.join(NOTES_VARS))
         query = query.replace('AUTO_INCREMENT', 'AUTOINCREMENT').replace('INT(11)', 'INTEGER')
