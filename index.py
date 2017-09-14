@@ -13,8 +13,8 @@ import json
 
 session_opts = {
     'session.type': 'file',
-    'session.data_dir': './data',
-    'session.cookie_expires': True,
+    'session.data_dir': SESSION_DIR,
+    'session.cookie_expires': False, # True: expire cookies when the browser is closed
     'session.auto': True
 }
 
