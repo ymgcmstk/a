@@ -7,8 +7,8 @@
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="//{{server}}:{{port}}/assets/index.css" rel="stylesheet">
-
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://{{server}}:{{port}}/assets/mypage.js"></script>
   </head>
 
   <body>
@@ -52,14 +52,19 @@
       <div id="notes">
         <table id="note-table" class="table">
           <thead>
-            <tr><th>Note Title</th><th>Status</th><th>Last Updated (GMT)</th></tr>
+            <tr><th>#</th><th>Note Title</th><th>Status</th><th>Last Updated (GMT)</th></tr>
           </thead>
           <tbody>
-            % for note_id, title, display, updated_at in notes:
+            % for cur_i, (note_id, title, display, updated_at) in enumerate(notes):
             % if display == 1:
             <tr>
             % else:
             <tr class="active">
+            % end
+            % if cur_i + 1 <= 9:
+              <td><a class="targtd" href="http://{{server}}:{{port}}/note/{{str(note_id)}}" id="td{{cur_i+1}}">{{cur_i+1}}</a></td>
+            % else:
+              <td><a href="http://{{server}}:{{port}}/note/{{str(note_id)}}" id="td0">-</a></td>
             % end
               <td><a href="http://{{server}}:{{port}}/note/{{str(note_id)}}">
                   {{title}}

@@ -224,6 +224,13 @@ $(function(){
         console.log($('#atag-back').attr('href'));
         window.location.href = $('#atag-back').attr('href');
     });
+    quill.keyboard.addBinding({
+        key: 37,
+        shortKey: true
+    }, function(range, context) {
+        save();
+        window.location.href = $('#atag-back').attr('href');
+    });
 
     // update title if changed
     $('#title').blur(function(e){
