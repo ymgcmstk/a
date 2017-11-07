@@ -91,6 +91,8 @@ $(function(){
             $.post('./../save/' + note_id, {
                 summary: encodeURI(JSON.stringify(quill.getContents())),
                 title: title
+            }).fail(function() {
+                alert('保存に失敗しました。ノートが長すぎる場合には大抵失敗します。当然他の要因の可能性もあります。');
             });
             change = new Delta();
             title_changed = false;
@@ -293,6 +295,14 @@ $(function(){
         }
     });
 
+    $(document).on('keydown', '#title', function (e) {
+        if (e.ctrlKey){
+            if (e.keyCode == 115) {
+                e.preventDefault();
+                save();
+            }
+        }
+    });
 });
 
 // quill.insertEmbed(10, 'image', 'https://pbs.twimg.com/profile_images/378800000220029324/fe66faeca20115da8566e51d83447ead_400x400.jpeg');

@@ -70,8 +70,8 @@ $(function(){
     $('#searchbtn').click(function(event){
         event.preventDefault();
         var query = $('#searchinput').val();
-        if (query.length > 0) window.location.href = '/?q=' + encodeURI(query);
-        else window.location.href = '/';
+        if (query.length > 0) window.location.href = window.location.href.split('?')[0] + '?q=' + encodeURI(query);
+        else window.location.href = window.location.href.split('?')[0];
     });
 
 });

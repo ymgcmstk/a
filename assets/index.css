@@ -13,7 +13,7 @@ form .input-group input {
     padding-right: 25px;
 }
 
-form {
+form:not(#forsearch) {
     padding: 15px;
 }
 

@@ -30,7 +30,10 @@
             <span class="irregular">{{message}}</span>
             % if user is None:
             <a class="irregular" href="//{{server}}:{{int(port)}}/login">Log-in</a>
+            % elif my_id == user_id:
+            <a class="irregular" href="//{{server}}:{{int(port)}}/member/{{my_id}}">My Page</a>
             % else:
+            <a class="irregular" href="//{{server}}:{{int(port)}}">Top Page</a>
             <a class="irregular" href="//{{server}}:{{int(port)}}/member/{{my_id}}">My Page</a>
             % end
           </div>

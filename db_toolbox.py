@@ -22,6 +22,10 @@ QUERY_SELECT_ALL_FULL = 'SELECT id, title, display, updated_at FROM %s ' % NOTES
 
 QUERY_SELECT_WITH_QUERY = 'SELECT notes.id, notes.title, notes.updated_at, user, notes.user_id FROM %s ' % NOTES_TABLE_NAME + \
                           'INNER JOIN users ON users.id = notes.user_id WHERE notes.display = 1 AND %s ORDER BY notes.updated_at DESC' #  LIMIT 30
+QUERY_SELECT_ALL_WITH_USER_AND_QUERY = 'SELECT notes.id, notes.title, notes.updated_at, user, user_id FROM %s ' % NOTES_TABLE_NAME + \
+                                       'INNER JOIN users ON users.id = notes.user_id WHERE display = 1 AND user_id = %s AND %s ORDER BY notes.updated_at DESC' #  LIMIT 30
+QUERY_SELECT_ALL_FULL_WITH_QUERY = 'SELECT id, title, display, updated_at FROM %s ' % NOTES_TABLE_NAME + \
+                                   'WHERE user_id = %s AND %s ORDER BY updated_at DESC' #  LIMIT 30
 
 QUERY_LAST = 'SELECT LAST_INSERT_ROWID() FROM %s' % NOTES_TABLE_NAME
 # QUERY_REPLACE % ', '.join(['(%s,%s)' % (key, value) for key, value in data_dict])
@@ -81,9 +85,36 @@ def get_notes_db():
     results = CURSOR.fetchall()
     return results
 
+def search_notes_with_user_db(user_id, q):
+    words = q.split()
+    conditions = []
+    for cur_word in words:
+        cur_word = cur_word.lower()
+        enc_word = encodeURI(cur_word).replace('%', '%%')
+        cur_condition = '(LOWER(title) LIKE "%' + cur_word + '%" OR LOWER(summary) LIKE "%' + enc_word + '%")'
+        conditions.append(cur_condition)
+    query = QUERY_SELECT_ALL_WITH_USER_AND_QUERY % (str(user_id), ' AND '.join(conditions))
+    print query
+    CURSOR.execute(query)
+    results = CURSOR.fetchall()
+    return results
+
 def get_notes_with_user_db(user_id):
     query = QUERY_SELECT_ALL_WITH_USER % str(user_id)
     print query
+    CURSOR.execute(query)
+    results = CURSOR.fetchall()
+    return results
+
+def search_notes_full_db(user_id, q):
+    words = q.split()
+    conditions = []
+    for cur_word in words:
+        cur_word = cur_word.lower()
+        enc_word = encodeURI(cur_word).replace('%', '%%')
+        cur_condition = '(LOWER(title) LIKE "%' + cur_word + '%" OR LOWER(summary) LIKE "%' + enc_word + '%")'
+        conditions.append(cur_condition)
+    query = QUERY_SELECT_ALL_FULL_WITH_QUERY % (str(user_id), ' AND '.join(conditions))
     CURSOR.execute(query)
     results = CURSOR.fetchall()
     return results

@@ -80,7 +80,11 @@ def member(user_id):
     my_id = session_get('user_id')
     if user_id == str(my_id):
         message = session_get('message')
-        notes = get_notes_full_db(user_id)
+        if 'q' in request.query:
+            query = request.query['q']
+            notes = search_notes_full_db(user_id, query)
+        else:
+            notes = get_notes_full_db(user_id)
         return template('views/mypage.html',
                         server=HOST_NAME,
                         port=PORT,
@@ -90,7 +94,12 @@ def member(user_id):
                         message=message)
     else:
         # notes = get_notes_full_db()
-        notes = get_notes_with_user_db(user_id)
+        message = session_get('message')
+        if 'q' in request.query:
+            query = request.query['q']
+            notes = search_notes_with_user_db(user_id, query)
+        else:
+            notes = get_notes_with_user_db(user_id)
         return template('views/index.html',
                         server=HOST_NAME,
                         port=PORT,
@@ -98,7 +107,7 @@ def member(user_id):
                         user=session_get('user'),
                         user_id=user_id,
                         my_id=session_get('user_id'),
-                        message='')
+                        message=message)
 
 @post('/member/<user_id>')
 def member_post(user_id):

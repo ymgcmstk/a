@@ -14,17 +14,23 @@
   <body>
     <div class="container">
       <div class="row">
-        <form class="navbar-form navbar-right" role="search">
-          <span class="irregular">{{message}}.</span>
-          <a class="irregular" href="//{{server}}:{{int(port)}}/rules">Rules</a>
-          <a class="irregular" href="//{{server}}:{{int(port)}}">Top page</a>
-          <div class="input-group">
-            <input id="searchinput" type="text" class="form-control" placeholder="Search" name="search">
-            <div class="input-group-btn">
-              <button id="searchbtn" class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-            </div>
+        <div class="col-md-9">
+          <div class="pull-right">
+            <span class="irregular">{{message}}</span>
+            <a class="irregular" href="//{{server}}:{{int(port)}}/rules">Rules</a>
+            <a class="irregular" href="//{{server}}:{{int(port)}}">Top page</a>
           </div>
-        </form>
+        </div>
+        <div class="col-md-offset-9">
+          <form id="forsearch" role="search">
+            <div class="input-group">
+              <input id="searchinput" type="text" class="form-control" placeholder="Search" name="search">
+              <div class="input-group-btn">
+                <button id="searchbtn" class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
       <div id="form">
         <form method="post" action="/member/{{user_id}}" class="form-inline">
@@ -58,14 +64,14 @@
             % for cur_i, (note_id, title, display, updated_at) in enumerate(notes):
             % if display == 1:
             <tr>
-            % else:
+              % else:
             <tr class="active">
-            % end
-            % if cur_i + 1 <= 9:
-              <td><a class="targtd" href="http://{{server}}:{{port}}/note/{{str(note_id)}}" id="td{{cur_i+1}}">{{cur_i+1}}</a></td>
-            % else:
+              % end
+              % if cur_i + 1 <= 9:
+                                <td><a class="targtd" href="http://{{server}}:{{port}}/note/{{str(note_id)}}" id="td{{cur_i+1}}">{{cur_i+1}}</a></td>
+                                % else:
               <td><a href="http://{{server}}:{{port}}/note/{{str(note_id)}}" id="td0">-</a></td>
-            % end
+              % end
               <td><a href="http://{{server}}:{{port}}/note/{{str(note_id)}}">
                   {{title}}
               </a></td>
