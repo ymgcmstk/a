@@ -20,8 +20,8 @@ QUERY_SELECT_ALL_WITH_USER = 'SELECT notes.id, notes.title, notes.updated_at, us
 QUERY_SELECT_ALL_FULL = 'SELECT id, title, display, updated_at FROM %s ' % NOTES_TABLE_NAME + \
                         'WHERE user_id = %s ORDER BY updated_at DESC' #  LIMIT 30
 
-QUERY_SELECT_WITH_QUERY = 'SELECT id, title, updated_at FROM %s ' % NOTES_TABLE_NAME + \
-                          'WHERE display = 1 AND %s ORDER BY updated_at DESC' #  LIMIT 30
+QUERY_SELECT_WITH_QUERY = 'SELECT notes.id, notes.title, notes.updated_at, user, notes.user_id FROM %s ' % NOTES_TABLE_NAME + \
+                          'INNER JOIN users ON users.id = notes.user_id WHERE notes.display = 1 AND %s ORDER BY notes.updated_at DESC' #  LIMIT 30
 
 QUERY_LAST = 'SELECT LAST_INSERT_ROWID() FROM %s' % NOTES_TABLE_NAME
 # QUERY_REPLACE % ', '.join(['(%s,%s)' % (key, value) for key, value in data_dict])
