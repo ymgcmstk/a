@@ -15,6 +15,7 @@ DATA_DIR = os.path.join(ROOT_DIR, 'data')
 SESSION_DIR = os.path.join(ROOT_DIR, 'data_session')
 FILE_DIR = os.path.join(ROOT_DIR, 'assets')
 IMCACHE_DIR = os.path.join(DATA_DIR, 'imcache')
+IMG_DIR = os.path.join(DATA_DIR, 'images')
 
 N_IMCACHE = 100
 

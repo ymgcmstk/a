@@ -198,6 +198,21 @@ def crop(note_id, x, y, w, h, im_i):
     print md5_hash + '.jpg has been generated.'
     return static_file(md5_hash + '.jpg', root=IMCACHE_DIR)
 
+@route('/image/load/<img>')
+def load_image(img):
+    check_user_consistency(note_id=note_id)
+    return static_file(img, root=IMG_DIR)
+
+@post('/image/save')
+def save_image(note_id):
+    check_user_consistency(note_id=note_id)
+    url = request.forms.get('url')
+    md5_hash = hashlib.md5(url).hexdigest()
+    file_path = os.path.join(IMG_DIR, md5_hash + '.jpg')
+    if get_photo(url, file_path):
+        return md5_hash + '.jpg'
+    return ''
+
 @route('/n_images/<note_id>')
 def get_n_images(note_id):
     n_images = get_n_images_db(note_id)
