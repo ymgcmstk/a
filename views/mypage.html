@@ -38,6 +38,7 @@
           <input type="text" name="pagetitle" id="pagetitle" class="form-control">
           <button id="notebtn" class="btn btn-default">submit</button>
         </form>
+        % if PAPER_NOTE_MODE:
         <div>or,</div>
         <form method="post" action="/member/{{user_id}}" class="form-inline">
           <label>PDF URL: </label>
@@ -53,6 +54,7 @@
           <input type="text" name="arxivid" id="arxivid" class="form-control">
           <button id="searchbtn" class="btn btn-default">submit</button>
         </form>
+        % end
       </div>
 
       <div id="notes">

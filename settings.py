@@ -5,6 +5,8 @@ import os
 import sqlite3
 from mytoolbox import makedirs_if_missing, makebsdirs_if_missing, touch, resolve_ip
 
+PAPER_NOTE_MODE = True
+
 HOST_NAME = resolve_ip()
 PORT = 10024
 # PORT_VIEWER = PORT + 1016

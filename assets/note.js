@@ -175,7 +175,9 @@ $(function(){
 
     // save finall-changed range for pasting images
     quill.on('selection-change', function(range, oldRange, source) {
-        if (range) last_range = range.index;
+        if (range) {
+            last_range = range.index;
+        }
     });
 
     // add shortcuts
@@ -269,6 +271,8 @@ $(function(){
         return whiteSpace;
     }
     quill.on('text-change', function(delta, oldDelta, source) {
+        if ('insert' in delta.ops[1]) last_range += delta.ops[1].insert.length;
+        if ('delete' in delta.ops[1]) last_range -= delta.ops[1].delete;
         var regex = /https?:\/\/[^\s]+$/;
         if(delta.ops.length === 2 && delta.ops[0].retain && isWhitespace(delta.ops[1].insert)) {
             var endRetain = delta.ops[0].retain;

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from bottle import route, run, template, post, static_file, request, redirect, default_app
+from bottle import route, run, template, post, static_file, request, redirect, default_app, BaseRequest
 from beaker.middleware import SessionMiddleware
 from db_toolbox import *
 from settings import *
@@ -10,6 +10,8 @@ import commands
 import cv2
 import hashlib
 import json
+
+BaseRequest.MEMFILE_MAX = 1024 * 1024
 
 session_opts = {
     'session.type': 'file',
@@ -90,6 +92,7 @@ def member(user_id):
                         port=PORT,
                         notes=notes,
                         user=session_get('user'),
+                        PAPER_NOTE_MODE=PAPER_NOTE_MODE,
                         user_id=user_id,
                         message=message)
     else:
