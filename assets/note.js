@@ -307,6 +307,24 @@ $(function(){
             }
         }
     });
+
+
+    $('#attachbtn').on('click', function() {
+        if($('#imgurl').val() == null) {
+            return;
+        }
+        console.log('pqr');
+        $.post('./../image/save', {
+            url: $('#imgurl').val()
+        }).done(function(data) {
+            console.log(data);
+            var image_path = './../image/load/' + data;
+            quill.insertEmbed(last_range, 'image', image_path);
+            console.log('success');
+        }).fail(function() {
+            alert('画像の保存に失敗しました。');
+        });
+    });
 });
 
 // quill.insertEmbed(10, 'image', 'https://pbs.twimg.com/profile_images/378800000220029324/fe66faeca20115da8566e51d83447ead_400x400.jpeg');

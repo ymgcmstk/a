@@ -315,19 +315,12 @@ def find_from_to(str1, start_str, end_str):
     end_num = str1.find(end_str, start_num)
     return str1[start_num:end_num]
 
-def get_photo(url, fname):
-    try:
-        urllib.urlretrieve(url, fname)
-        urllib.urlcleanup()
+def get_photo(url, dst_path):
+    cmd = 'wget %s -O %s' % (url, dst_path)
+    execute_command(cmd)
+    if os.path.exists(dst_path):
         return True
-    except IOError:
-        return False
-    except urllib2.HTTPError:
-        return False
-    except urllib2.URLError:
-        return False
-    except httplib.BadStatusLine:
-        return False
+    return False
 
 def get_photos(photos):
     threads=[]

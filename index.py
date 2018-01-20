@@ -5,7 +5,7 @@ from bottle import route, run, template, post, static_file, request, redirect, d
 from beaker.middleware import SessionMiddleware
 from db_toolbox import *
 from settings import *
-from mytoolbox import get_html, full_listdir
+from mytoolbox import get_html, full_listdir, get_photo
 import commands
 import cv2
 import hashlib
@@ -200,18 +200,18 @@ def crop(note_id, x, y, w, h, im_i):
 
 @route('/image/load/<img>')
 def load_image(img):
-    check_user_consistency(note_id=note_id)
     return static_file(img, root=IMG_DIR)
 
 @post('/image/save')
-def save_image(note_id):
-    check_user_consistency(note_id=note_id)
+def save_image():
     url = request.forms.get('url')
     md5_hash = hashlib.md5(url).hexdigest()
     file_path = os.path.join(IMG_DIR, md5_hash + '.jpg')
+    print url, file_path
     if get_photo(url, file_path):
+        print md5_hash
         return md5_hash + '.jpg'
-    return ''
+    return 'failure'
 
 @route('/n_images/<note_id>')
 def get_n_images(note_id):

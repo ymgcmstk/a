@@ -25,6 +25,7 @@ DB_FILE_NAME = os.path.join(DATA_DIR, 'basic', '%s.db' % DB_NAME)
 
 makedirs_if_missing(IMCACHE_DIR)
 makedirs_if_missing(SESSION_DIR)
+makedirs_if_missing(IMG_DIR)
 makebsdirs_if_missing(DB_FILE_NAME)
 
 # connector and cursor
