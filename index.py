@@ -108,6 +108,7 @@ def member(user_id):
                         port=PORT,
                         notes=notes,
                         user=session_get('user'),
+                        PAPER_NOTE_MODE=PAPER_NOTE_MODE,
                         user_id=user_id,
                         my_id=session_get('user_id'),
                         message=message)
